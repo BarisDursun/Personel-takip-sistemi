@@ -1,0 +1,57 @@
+CLASS lcl_class_0100 DEFINITION DEFERRED.
+CLASS lcl_class_0200 DEFINITION DEFERRED.
+
+TYPES: BEGIN OF gtt_alv_0100,
+         personel_id            TYPE z_180_persid_de,
+         personel_ad            TYPE z_180_persad_de,
+         personel_soyad         TYPE z_180_perssoyad_de,
+         PERSONEL_DEPARTMAN_ID  TYPE z_180_persdept_de,
+         PERSONEL_TITLE         TYPE z_180_perstitle_de,
+         TOPLAM_TECRUBE         TYPE z_180_top_tecrube_de,
+         line_color             TYPE char4,
+         is_editable            TYPE lvc_t_styl,
+       END OF gtt_alv_0100.
+
+*-- Listeleme Ekranı İçin Tablo Yapısı (Screen 0200)
+TYPES: BEGIN OF gtt_alv_0200,
+         personel_id            TYPE z_180_persid_de,
+         personel_ad            TYPE z_180_persad_de,
+         personel_soyad         TYPE z_180_perssoyad_de,
+         personel_departman_ad  TYPE z_180_perdeptad_de,
+         personel_title_ad      TYPE z_180_perstitlead_de,
+         toplam_tecrube         TYPE z_180_top_tecrube_de,
+         personel_maas          TYPE int4,
+         personel_yillik_izin   TYPE char10,
+       END OF gtt_alv_0200.
+
+*-- Selection Screen Değişkenleri
+DATA: gv_pa  TYPE z_180_persad_de,
+      gv_psa TYPE z_180_perssoyad_de,
+      gv_pda TYPE z_180_persdeptad_de,
+      gv_pta TYPE z_180_perstitlead_de.
+
+DATA: go_main_0100 TYPE REF TO lcl_class_0100,
+      go_main_0200 TYPE REF TO lcl_class_0200,
+      go_grid      TYPE REF TO cl_gui_alv_grid,
+      go_container TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_fcat   TYPE lvc_t_fcat,
+      gs_fcat   TYPE lvc_s_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+DATA: gt_alvtable_0100 TYPE TABLE OF gtt_alv_0100,
+      gs_alvtable_0100 TYPE gtt_alv_0100,
+      gt_alvtable_0200 TYPE TABLE OF gtt_alv_0200,
+      gs_alvtable_0200 TYPE gtt_alv_0200.
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001. " İşlem Seçimi
+  PARAMETERS: rb_yeni RADIOBUTTON GROUP rb1 DEFAULT 'X' USER-COMMAND usrl, "enter a basımış gibi sonrakine geçer
+              rb_lstl RADIOBUTTON GROUP rb1.
+SELECTION-SCREEN END OF BLOCK b1.
+
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002. " Filtreler
+  SELECT-OPTIONS: gso_pa  FOR gv_pa  NO INTERVALS MODIF ID gso,
+                  gso_psa FOR gv_psa NO INTERVALS MODIF ID gso,
+                  gso_pda FOR gv_pda NO INTERVALS MODIF ID gso,
+                  gso_pta FOR gv_pta NO INTERVALS MODIF ID gso.
+SELECTION-SCREEN END OF BLOCK b2.

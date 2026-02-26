@@ -1,0 +1,33 @@
+REPORT Z_180_PERSTAKIP.
+
+INCLUDE: Z_180_PERSTAKIP_top,
+         Z_180_PERSTAKIP_cls,
+         Z_180_PERSTAKIP_mdl.
+
+AT SELECTION-SCREEN OUTPUT.
+  IF rb_lstl EQ 'X'.
+    LOOP AT SCREEN.
+      IF screen-group1 EQ 'GSO'.
+        screen-active = 1.
+        MODIFY SCREEN.
+      ENDIF.
+    ENDLOOP.
+  ELSE.
+    LOOP AT SCREEN.
+      IF screen-group1 EQ 'GSO'.
+        screen-active = 0.
+        MODIFY SCREEN.
+      ENDIF.
+    ENDLOOP.
+  ENDIF.
+
+START-OF-SELECTION.
+  CREATE OBJECT go_main_0100.
+  CREATE OBJECT go_main_0200.
+
+  CASE 'X'.
+    WHEN rb_yeni.
+      go_main_0100->start_screen( ).
+    WHEN rb_lstl.
+      go_main_0200->start_screen( ).
+  ENDCASE.
